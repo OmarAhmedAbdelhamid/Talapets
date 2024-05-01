@@ -10,12 +10,12 @@ class MyButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushReplacementNamed("homepage");
-      //     context,
-      //     MaterialPageRoute(builder: (context) {
-      //       return const Homescreen();
-      //     }),
-      //   );
-       },
+        //     context,
+        //     MaterialPageRoute(builder: (context) {
+        //       return const Homescreen();
+        //     }),
+        //   );
+      },
       child: Container(
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(
@@ -26,11 +26,8 @@ class MyButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
         ),
         child: const Center(
-          child:
-
-          Text(
+          child: Text(
             "Sign In",
-
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,

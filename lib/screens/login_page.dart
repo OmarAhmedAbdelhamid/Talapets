@@ -5,12 +5,10 @@ import 'package:talapets/buttons/my_reg_button.dart';
 import 'package:talapets/buttons/my_textField.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
-
 import '../buttons/Buttonsssss.dart';
 
 // ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
-
   VoidCallback showRegisterPage;
   LoginPage({Key? key, this.showRegisterPage = _defaultShowRegisterPage});
 
@@ -26,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   final emailcontroller = TextEditingController();
 
   final passwordcontroller = TextEditingController();
-
 
   void signUserIn() {}
 
@@ -88,40 +85,43 @@ class _LoginPageState extends State<LoginPage> {
                     height: 8,
                   ),
                   Button(
-                  width: double.infinity,
-                  title: 'Sign up',onPressed:  () async {
+                    title: 'Sign Ip',
+                    onPressed: () async {
                       try {
-                  final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                  email: emailcontroller.text,
-                  password: passwordcontroller.text,
-                  );
+                        final credential = await FirebaseAuth.instance
+                            .signInWithEmailAndPassword(
+                          email: emailcontroller.text,
+                          password: passwordcontroller.text,
+                        );
 
-                  Navigator.of(context).pushReplacementNamed('homepage');
-                  } on FirebaseAuthException catch (e) {
-            if (e.code == 'user-not-found') {
-            print('No user found for that email.');
-            AwesomeDialog(
-                context: context,
-                dialogType: DialogType.error,
-                animType: AnimType.rightSlide,
-                title: 'Error',
-                desc: 'No user found for that email.',
-                btnCancelOnPress: () {},
-                    btnOkOnPress: () {},
-                    )..show();
-            } else if (e.code == 'wrong-password') {
-            print('Wrong password provided for that user.');
-            }
-            AwesomeDialog(
-                context: context,
-                dialogType: DialogType.error,
-                animType: AnimType.rightSlide,
-                title: 'Error',
-                desc: 'Wrong password provided for that user.',
-                btnCancelOnPress: () {},
-                    btnOkOnPress: () {},
-                    )..show();
-            }}, disable: false,
+                        Navigator.of(context).pushReplacementNamed('homepage');
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'user-not-found') {
+                          print('No user found for that email.');
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.error,
+                            animType: AnimType.rightSlide,
+                            title: 'Error',
+                            desc: 'No user found for that email.',
+                            btnCancelOnPress: () {},
+                            btnOkOnPress: () {},
+                          ).show();
+                        } else if (e.code == 'wrong-password') {
+                          print('Wrong password provided for that user.');
+                        }
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.error,
+                          animType: AnimType.rightSlide,
+                          title: 'Error',
+                          desc: 'Wrong password provided for that user.',
+                          btnCancelOnPress: () {},
+                          btnOkOnPress: () {},
+                        )..show();
+                      }
+                    },
+                    disable: false,
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(
@@ -192,6 +192,3 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 }
-
-
-

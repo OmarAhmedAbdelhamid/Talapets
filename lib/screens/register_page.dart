@@ -2,28 +2,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:talapets/buttons/my_textField.dart';
 import 'package:talapets/buttons/sign_in_button.dart';
-
-
-
 import '../buttons/Buttonsssss.dart';
-
 
 // ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
-    VoidCallback showLoginPage;
-    //backend
-    RegisterPage({Key? key, this.showLoginPage = _defaultShowLoginPage});
+  VoidCallback showLoginPage;
+  //backend
+  RegisterPage({Key? key, this.showLoginPage = _defaultShowLoginPage});
 
-    static void _defaultShowLoginPage() {
-      // No operation, as this is a default value
-    }
+  static void _defaultShowLoginPage() {
+    // No operation, as this is a default value
+  }
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-    //backend
+  //backend
   final usernamecontroller = TextEditingController();
 
   final emailcontroller = TextEditingController();
@@ -101,26 +97,27 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 30,
                 ),
                 Button(
-                  width: double.infinity,
-                  title: 'Sign up', onPressed: () async {
+                  title: 'Sign up',
+                  onPressed: () async {
                     try {
-                  final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                    email: emailcontroller.text,
-                    password: passwordcontroller.text,
-                  );
+                      final credential = await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                        email: emailcontroller.text,
+                        password: passwordcontroller.text,
+                      );
 
-
-                  Navigator.of(context).pushReplacementNamed('homepage');
-                } on FirebaseAuthException catch (e) {
+                      Navigator.of(context).pushReplacementNamed('login');
+                    } on FirebaseAuthException catch (e) {
                       if (e.code == 'weak-password') {
                         print('The password provided is too weak.');
                       } else if (e.code == 'email-already-in-use') {
                         print('The account already exists for that email.');
                       }
-                    }catch (e) {
+                    } catch (e) {
                       print(e);
-                    } }, disable: false,
-
+                    }
+                  },
+                  disable: false,
                 ),
                 const SizedBox(height: 30),
                 Padding(

@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 class Button extends StatelessWidget {
   const Button(
       {Key? key,
-        required this.width,
         required this.title,
         required this.onPressed,
         required this.disable})
       : super(key: key);
 
-  final double width;
   final String title;
   final bool disable;
   final Function() onPressed;
@@ -17,19 +15,28 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width,
-      height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(255, 95, 233, 54),
-          foregroundColor: Colors.white,
-        ),
-        onPressed: disable ? null : onPressed,
-        child: Text(title,
-            style: const TextStyle(
-              fontSize: 18,
+      width: 330,
+      height: 70,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 25),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50.0),
+            ),
+            backgroundColor: Color(0xff63280D),
+            foregroundColor: Colors.white,
+          ),
+          onPressed: disable ? null : onPressed,
+          child: Text(
+            "Sign In",
+            style: TextStyle(
+              color: Colors.white,
               fontWeight: FontWeight.bold,
-            )),
+              fontSize: 16,
+            ),
+          ),
+        ),
       ),
     );
   }
