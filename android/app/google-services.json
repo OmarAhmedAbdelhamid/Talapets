@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "472524987057",
+    "project_id": "talapets-backend",
+    "storage_bucket": "talapets-backend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472524987057:android:8bd8f0f08ac1b93ca0a090",
+        "android_client_info": {
+          "package_name": "com.example.talapets"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC68pxLrGhBgFy6qUbnPh_hRtJ288npNEg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
