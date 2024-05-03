@@ -7,15 +7,19 @@ class MyTextField extends StatelessWidget {
   final String hintText;
   final bool obsecureText;
 
+  final String?Function(String?)?validator;
+
   const MyTextField({
     super.key,
     required this.controller,
     required this.hintText,
     required this.obsecureText,
+    required this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
+    validator : validator;
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 35.0,

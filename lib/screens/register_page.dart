@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:talapets/buttons/my_textField.dart';
@@ -28,6 +29,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final confPasscontroller = TextEditingController();
 
+  GlobalKey<FormState> formState = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +44,9 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           child: Center(
             child: SingleChildScrollView(
-              child: Column(children: [
+              child: Form(
+                key: formState,
+                child: Column(children: [
                 const SizedBox(
                   height: 10,
                 ),
@@ -68,6 +73,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: usernamecontroller,
                   hintText: 'Username',
                   obsecureText: false,
+                  validator: (val){
+                    if(val == ""){
+                      // return "Can't be empty" ;
+                    }
+                    return "Can't be empty" ;
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -76,6 +87,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: emailcontroller,
                   hintText: 'Email',
                   obsecureText: false,
+                  validator: (val){
+                    if(val == ""){
+                      // return "Can't be empty" ;
+                    }
+                    return "Can't be empty" ;
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -84,6 +101,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: passwordcontroller,
                   hintText: 'password',
                   obsecureText: true,
+                  validator: (val){
+                    if(val == ""){
+                      // return "Can't be empty" ;
+                    }
+                    return "Can't be empty" ;
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -92,6 +115,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: confPasscontroller,
                   hintText: 'Confirm password',
                   obsecureText: true,
+                  validator: (val){
+                    if(val == ""){
+                      // return "Can't be empty" ;
+                    }
+                    return "Can't be empty" ;
+                  },
                 ),
                 const SizedBox(
                   height: 30,
@@ -99,23 +128,44 @@ class _RegisterPageState extends State<RegisterPage> {
                 Button(
                   title: 'Sign up',
                   onPressed: () async {
-                    try {
-                      final credential = await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                        email: emailcontroller.text,
-                        password: passwordcontroller.text,
-                      );
+                    if(formState.currentState!.validate()){
+                      try {
+                        final credential = await FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                          email: emailcontroller.text,
+                          password: passwordcontroller.text,
+                        );
+                     FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                        Navigator.of(context).pushReplacementNamed('login');
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'weak-password') {
+                          print('The password is weak');
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.error,
+                            animType: AnimType.rightSlide,
+                            title: 'Error',
+                            desc: 'The password is weak',
+                            btnCancelOnPress: () {},
+                          ).show();
+                          print('The password provided is too weak.');
+                        } else if (e.code == 'email-already-in-use') {
+                          print('The account already exists for that email.');
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.error,
+                            animType: AnimType.rightSlide,
+                            title: 'Error',
+                            desc: 'The account already exists for that email.',
+                            btnCancelOnPress: () {},
 
-                      Navigator.of(context).pushReplacementNamed('login');
-                    } on FirebaseAuthException catch (e) {
-                      if (e.code == 'weak-password') {
-                        print('The password provided is too weak.');
-                      } else if (e.code == 'email-already-in-use') {
-                        print('The account already exists for that email.');
+                          ).show();
+                        }
+                      } catch (e) {
+                        print(e);
                       }
-                    } catch (e) {
-                      print(e);
                     }
+
                   },
                   disable: false,
                 ),
@@ -158,7 +208,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 SignButton(
                   onTap: widget.showLoginPage,
                 ),
-              ]),
+              ]),),
+
             ),
           ),
         ));
