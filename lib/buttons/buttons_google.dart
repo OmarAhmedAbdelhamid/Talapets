@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Button extends StatelessWidget {
-  const Button(
+class Buttongoogle extends StatelessWidget {
+  const Buttongoogle(
       {Key? key,
         required this.title,
         required this.onPressed,
@@ -28,14 +28,15 @@ class Button extends StatelessWidget {
             foregroundColor: Colors.white,
           ),
           onPressed: disable ? null : onPressed,
-          child: Text(
-            "Log-in",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Login With Google"),
+                Container(width: 5,),
+                Image.asset('assets/images/google_icon.png',width: 30,)
+              ],
             ),
-          ),
+
         ),
       ),
     );

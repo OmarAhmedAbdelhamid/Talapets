@@ -44,7 +44,7 @@ class _MyRegButtonState extends State<MyRegButton> {
         child: const Center(
           child:
           Text(
-            "Register now"
+            "Create new account"
               ,style: TextStyle(
           color: Colors.white,
               fontWeight: FontWeight.bold,

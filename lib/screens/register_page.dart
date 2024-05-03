@@ -27,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final passwordcontroller = TextEditingController();
 
-  final confPasscontroller = TextEditingController();
+  final confPhonenumber = TextEditingController();
 
   GlobalKey<FormState> formState = GlobalKey<FormState>();
 
@@ -112,8 +112,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 20,
                 ),
                 MyTextField(
-                  controller: confPasscontroller,
-                  hintText: 'Confirm password',
+                  controller: confPhonenumber,
+                  hintText: 'Phone Number',
                   obsecureText: true,
                   validator: (val){
                     if(val == ""){
@@ -132,10 +132,21 @@ class _RegisterPageState extends State<RegisterPage> {
                       try {
                         final credential = await FirebaseAuth.instance
                             .createUserWithEmailAndPassword(
+
                           email: emailcontroller.text,
                           password: passwordcontroller.text,
+
                         );
-                     FirebaseAuth.instance.currentUser!.sendEmailVerification();
+
+                       // final credential=  await FirebaseAuth.instance.verifyPhoneNumber(
+                       //    phoneNumber = confPhonenumber.text,
+                       //    phoneNumber: '+44 7123 123 456',
+                       //    verificationCompleted: (PhoneAuthCredential phone) {},
+                       //    verificationFailed: (FirebaseAuthException e) {},
+                       //    codeSent: (String verificationId, int? resendToken) {},
+                       //    codeAutoRetrievalTimeout: (String verificationId) {},
+                       //  );
+
                         Navigator.of(context).pushReplacementNamed('login');
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {

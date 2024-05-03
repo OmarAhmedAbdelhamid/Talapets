@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:talapets/buttons/my_reg_button.dart';
 import 'package:talapets/buttons/my_textField.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:talapets/screens/Verify.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../buttons/Buttonsssss.dart';
+import '../buttons/buttons_google.dart';
+
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -92,8 +94,63 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 8,
                     ),
+                     InkWell(
+                       onTap: () async{
+                         if(emailController.text == ""){
+                           AwesomeDialog(
+                             context: context,
+                             dialogType: DialogType.error,
+                             animType: AnimType.rightSlide,
+                             title: 'No email detected',
+                             desc: 'Please insert your email',
+
+                           ).show();
+                           return;
+                           /////////////////////////////////////////////////
+                         }
+                         try{
+                           await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
+
+                           AwesomeDialog(
+                             context: context,
+                             dialogType: DialogType.error,
+                             animType: AnimType.rightSlide,
+                             title: 'Your email is not found',
+                             desc: 'Please insert your correct email',
+                           ).show();
+                         }catch(e){
+
+                         }
+
+
+
+                         AwesomeDialog(
+                           context: context,
+                           dialogType: DialogType.success,
+                           animType: AnimType.rightSlide,
+                           title: 'Password Reset link sent',
+                           desc: 'Check you email address so you can change your password',
+                           btnOkOnPress: () {},
+                         ).show();
+                       },
+                       child: Container(
+                         padding: EdgeInsets.only(right: 45),
+                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Forgot password?",
+                              style: TextStyle(
+                                color: Color(0xff632B00),
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                                             ),
+                       ),
+                     ),
                     Button(
-                      title: 'Sign In',
+                      title: 'Log-in',
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           try {
@@ -107,44 +164,35 @@ class _LoginPageState extends State<LoginPage> {
                             final user = userCredential.user;
                             if (user != null) {
                               if (user.emailVerified) {
-                                Navigator.of(context).pushReplacementNamed(
-                                    'homepage');
+                                Navigator.of(context).pushReplacementNamed('homepage');
                               } else {
                                 // Email not verified
-                                FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                                FirebaseAuth.instance.currentUser!.sendEmailVerification();//send verifcation link to gmail
                                 AwesomeDialog(
                                   context: context,
                                   dialogType: DialogType.warning,
                                   animType: AnimType.rightSlide,
                                   title: 'Please verify your email address',
-                                  desc: 'You\' almost set to start using this app , check your email address and verify',
+                                  desc: 'You\'re almost set to start using this app , check your email address and verify',
                                   btnOkOnPress: () {},
                                 ).show();
                               }
                             }
+                            //write wrong password or email
                           } on FirebaseAuthException catch (e) {
-                            if (e.code == 'user-not-found') {
+                            if (e.code == 'invalid-credential') {
                               print('No user found for that email.');
                               AwesomeDialog(
                                 context: context,
                                 dialogType: DialogType.error,
                                 animType: AnimType.rightSlide,
                                 title: 'Error',
-                                desc: 'No user found for that email.',
+                                desc: 'Email or password incorrect',
                                 btnCancelOnPress: () {},
                               ).show();
-                            } else if (e.code == 'wrong-password') {
-                              print('Wrong password');
-                              AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.error,
-                                animType: AnimType.rightSlide,
-                                title: 'Error',
-                                desc: 'Incorrect password',
-                                btnCancelOnPress: () {},
-                              ).show();
+
                             } else {
-                              print('Error: ${e.message}');
+                              print('Error: ${e.code}');
                               AwesomeDialog(
                                 context: context,
                                 dialogType: DialogType.error,
@@ -159,22 +207,44 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       disable: false,
                     ),
+                    //Google sign in
+                    Buttongoogle(
+                      title: 'Log-in with google ',
+                      onPressed: () async {
+
+
+                        // Trigger the authentication flow
+                        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+                        if (googleUser == null){
+                          return; // if i decided to click on screen without log in it will stop here
+                        }
+
+                        // Obtain the auth details from the request
+                        final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+                        // Create a new credential
+                        final credential = GoogleAuthProvider.credential(
+                          accessToken: googleAuth?.accessToken,
+                          idToken: googleAuth?.idToken,
+                        );
+
+                        // Once signed in, return the UserCredential
+                         await FirebaseAuth.instance.signInWithCredential(credential);
+
+                         Navigator.of(context).pushReplacementNamed('homepage');
+
+
+                        }, disable: false,
+                    ),
+
+
+
                     const Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: 45.0,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            "Forgot password?",
-                            style: TextStyle(
-                              color: Color(0xff632B00),
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
+
                     ),
                     const SizedBox(
                       height: 30,

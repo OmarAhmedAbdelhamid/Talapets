@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:talapets/screens/authentication.dart';
 import 'package:talapets/screens/editProfileScreen.dart';
 import 'package:talapets/screens/homeScreen.dart';
@@ -111,7 +112,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Spacer(),
                     ElevatedButton(
                       onPressed: () async {
-                        await FirebaseAuth.instance.signOut();
+                        GoogleSignIn googleSignIn = GoogleSignIn();
+                        googleSignIn.disconnect(); // to sign out from google and choose another acc
+                        await FirebaseAuth.instance.signOut(); // sign out
                         Navigator.push(context, MaterialPageRoute(builder: (
                           context,
                         ) {

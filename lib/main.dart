@@ -43,7 +43,6 @@ class _TalaPetsState extends State<TalaPets> {
           FirebaseAuth.instance.currentUser!.emailVerified
           ? "homepage"
           : "login",
-      //backend
       routes: {
         "signup": (context) => RegisterPage(),
         "login": (context) => LoginPage(showRegisterPage: () {  },),

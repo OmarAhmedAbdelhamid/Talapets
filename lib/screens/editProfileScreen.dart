@@ -12,10 +12,12 @@ class _EditProfileState extends State<EditProfile> {
   final textNameID = TextEditingController();
   final textPohneID = TextEditingController();
   final textEmailID = TextEditingController();
-  final textDateOfBirthID = TextEditingController();
+  final TextEditingController textDateOfBirthID = TextEditingController();
   final textGenderID = TextEditingController();
   final textAddressID = TextEditingController();
   final textCreditCardID = TextEditingController();
+  List<String> dropdownItems = ["Male", "Female"];
+  String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +43,8 @@ class _EditProfileState extends State<EditProfile> {
             leading: IconButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (
-                  context,
-                ) {
+                    context,
+                    ) {
                   return const ProfileScreen();
                 }));
               },
@@ -63,7 +65,7 @@ class _EditProfileState extends State<EditProfile> {
                         radius: 50,
                         backgroundColor: Colors.white,
                         backgroundImage:
-                            AssetImage('assets/images/profile.png'),
+                        AssetImage('assets/images/profile.png'),
                       ),
                       Positioned(
                         bottom: 0,
@@ -108,15 +110,48 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 lineMaker(),
                 dataEntered(
-                  controller: textDateOfBirthID,
-                  hintText: "Date of Birth",
-                  icon: Icons.cake_outlined,
-                ),
+                    reading: true,
+                    controller: textDateOfBirthID,
+                    hintText: "Date of Birth",
+                    icon: Icons.cake_outlined,
+                    onTap: () {
+                      _datePicker();
+                    }),
                 lineMaker(),
-                dataEntered(
-                  controller: textGenderID,
-                  hintText: "Gender",
-                  icon: Icons.male,
+                Row(
+                  children: [
+                    Container(
+                      child: Icon(
+                        Icons.male,
+                        size: 24,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: DropdownButton<String>(
+                        value: selectedValue,
+                        dropdownColor: Color(0xff95654E),
+                        icon: const Icon(
+                          Icons.arrow_drop_down,
+                          size: 20,
+                          color: Colors.black,
+                        ),
+                        hint: Text("Gender"),
+                        items: dropdownItems.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            selectedValue = newValue;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 lineMaker(),
                 dataEntered(
@@ -148,8 +183,8 @@ class _EditProfileState extends State<EditProfile> {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (
-                          context,
-                        ) {
+                            context,
+                            ) {
                           return const ProfileScreen();
                         }));
                       },
@@ -180,25 +215,45 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Widget dataEntered({
-    required TextEditingController controller,
-    required String hintText,
-    required IconData icon,
+    bool? reading,
+    TextEditingController? controller,
+    String? hintText,
+    IconData? icon,
     double iconSize = 24.0,
-    double paddingSize = 30.0,
     double textFieldWidth = 330.0,
+    double paddingSize = 30,
+    VoidCallback? onTap,
   }) {
-    return Row(
-      children: [
-        Icon(icon, size: iconSize),
-        Padding(padding: EdgeInsets.only(right: paddingSize)),
-        SizedBox(
-          width: textFieldWidth,
-          child: TextField(
-            controller: controller,
-            decoration: InputDecoration(hintText: hintText),
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Icon(icon, size: iconSize),
+          Padding(padding: EdgeInsets.only(right: paddingSize)),
+          SizedBox(
+            width: textFieldWidth,
+            child: TextField(
+              readOnly: reading ?? true,
+              controller: controller,
+              decoration: InputDecoration(hintText: hintText),
+              onTap: onTap,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
+  }
+
+  Future<void> _datePicker() async {
+    DateTime? _picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1990),
+        lastDate: DateTime(2025));
+    if (_picked != null) {
+      setState(() {
+        textDateOfBirthID.text = _picked.toString().split(" ")[0];
+      });
+    }
   }
 }
