@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:talapets/screens/authentication.dart';
 import 'package:talapets/screens/categoriesScreen.dart';
 import 'package:talapets/screens/editProfileScreen.dart';
@@ -95,7 +96,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (
                             context,
-                            ) {
+                            )
+                        {
                           return AuthScreen();
                         }));
                       },
@@ -115,11 +117,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           bottomNavigationBar: bottomNavBar(),
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xff95654E),
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                Navigator.of(context).pushReplacementNamed('sellPage');
+              });
+            },
             child: const Icon(Icons.add, color: Colors.white),
           ),
-          floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         ),
       ),
     );

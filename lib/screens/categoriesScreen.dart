@@ -174,7 +174,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         bottomNavigationBar: bottomNavBar(),
         floatingActionButton: FloatingActionButton(
           backgroundColor: const Color(0xff95654E),
-          onPressed: () {},
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pushReplacementNamed('sellPage');
+            });
+          },
           child: const Icon(Icons.add, color: Colors.white),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -186,26 +190,26 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return AppBar(
       title: _showSearchBar
           ? TextField(
-        controller: _searchController,
-        decoration: const InputDecoration(
-          hintText: 'Search categories...',
-          border: InputBorder.none,
-          prefixIcon: Icon(Icons.search),
-        ),
-        onChanged: (value) {
-          // Perform search/filtering here
-        },
-      )
+              controller: _searchController,
+              decoration: const InputDecoration(
+                hintText: 'Search categories...',
+                border: InputBorder.none,
+                prefixIcon: Icon(Icons.search),
+              ),
+              onChanged: (value) {
+                // Perform search/filtering here
+              },
+            )
           : null,
       leading: !_showSearchBar
           ? IconButton(
-        icon: const Icon(Icons.search),
-        onPressed: () {
-          setState(() {
-            _showSearchBar = true;
-          });
-        },
-      )
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                setState(() {
+                  _showSearchBar = true;
+                });
+              },
+            )
           : null,
       actions: [
         if (_showSearchBar)

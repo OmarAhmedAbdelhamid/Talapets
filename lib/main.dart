@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:talapets/screens/Verify.dart';
+import 'package:talapets/screens/Sell.dart';
 import 'package:talapets/screens/authentication.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:talapets/screens/register_page.dart';

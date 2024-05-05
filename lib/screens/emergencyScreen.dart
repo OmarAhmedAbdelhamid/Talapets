@@ -85,11 +85,14 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
           bottomNavigationBar: bottomNavBar(),
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xff95654E),
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                Navigator.of(context).pushReplacementNamed('sellPage');
+              });
+            },
             child: const Icon(Icons.add, color: Colors.white),
           ),
-          floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         ),
       ),
     );

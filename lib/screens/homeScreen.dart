@@ -18,8 +18,12 @@ class _HomescreenState extends State<Homescreen> {
       body: OnlineShoppingApp(),
       bottomNavigationBar: bottomNavBar(),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff95654E),
-        onPressed: () {},
+        backgroundColor: const Color(0xff95654E),
+        onPressed: () {
+          setState(() {
+            Navigator.of(context).pushReplacementNamed('sellPage');
+          });
+        },
         child: const Icon(Icons.add, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

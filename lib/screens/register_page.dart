@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:talapets/buttons/my_textField.dart';
 import 'package:talapets/buttons/sign_in_button.dart';
 import '../buttons/Buttonsssss.dart';
+import 'login_page.dart';
 
 // ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
@@ -20,8 +21,27 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
+
+
 class _RegisterPageState extends State<RegisterPage> {
   //backend
+  ////firestore info
+  CollectionReference userinfo =
+  FirebaseFirestore.instance.collection('userinfo');
+
+  Future<void> addUser() {
+    // Call the user's CollectionReference to add a new user
+    return userinfo
+        .add({
+      "Username": usernamecontroller.text,
+      "Email": emailcontroller.text,
+      "Phone": confPhonenumber.text,
+    })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
+
+  /////end of firestore info
   final usernamecontroller = TextEditingController();
 
   final emailcontroller = TextEditingController();
@@ -129,6 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Button(
                   title: 'Sign up',
                   onPressed: () async {
+                    addUser();
                     if(formState.currentState!.validate()){
                       try {
                         final credential = await FirebaseAuth.instance
@@ -139,11 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                         );
 
-                       CollectionReference collref = FirebaseFirestore.instance.collection('Omar');
-                       collref.add({
-                         'name':usernamecontroller.text,
-                         'phone number':confPhonenumber.text,
-                       });
+
                         Navigator.of(context).pushReplacementNamed('login');
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {

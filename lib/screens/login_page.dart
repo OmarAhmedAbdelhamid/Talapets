@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:talapets/buttons/my_reg_button.dart';
@@ -17,10 +18,26 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+
+
+
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  CollectionReference userinfo =
+  FirebaseFirestore.instance.collection('userinfo');
+
+  Future<void> addUser() {
+    // Call the user's CollectionReference to add a new user
+    return userinfo
+        .add({
+      "Username": emailController.text,
+    })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
 
   @override
   Widget build(BuildContext context) {
