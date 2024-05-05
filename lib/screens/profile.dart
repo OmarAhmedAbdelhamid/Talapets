@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:talapets/screens/authentication.dart';
 import 'package:talapets/screens/editProfileScreen.dart';
 import 'package:talapets/screens/homeScreen.dart';
+import 'package:flutter/src/material/ink_well.dart';
 
 void main() {
   runApp(const ProfileScreen());
@@ -88,8 +89,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     "6W49+PJC, Al Azaritah WA Ash Shatebi, Bab Sharqi, Alexandria Governorate",
                     20),
                 lineMaker(),
-                buildCard(Icons.credit_card, "**** **** **** *785", _fontSize),
+                InkWell(
+                  child: Container(
+                      child: buildCard(Icons.credit_card, "Delete account", _fontSize)),
+
+                ),
+
+                buildCard(Icons.credit_card, "Delete account", _fontSize),
+
                 lineMaker(),
+
+
                 Padding(
                   padding: const EdgeInsets.only(top: 70),
                   child: Row(children: [

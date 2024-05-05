@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:talapets/buttons/my_textField.dart';
@@ -138,15 +139,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
                         );
 
-                       // final credential=  await FirebaseAuth.instance.verifyPhoneNumber(
-                       //    phoneNumber = confPhonenumber.text,
-                       //    phoneNumber: '+44 7123 123 456',
-                       //    verificationCompleted: (PhoneAuthCredential phone) {},
-                       //    verificationFailed: (FirebaseAuthException e) {},
-                       //    codeSent: (String verificationId, int? resendToken) {},
-                       //    codeAutoRetrievalTimeout: (String verificationId) {},
-                       //  );
-
+                       CollectionReference collref = FirebaseFirestore.instance.collection('Omar');
+                       collref.add({
+                         'name':usernamecontroller.text,
+                         'phone number':confPhonenumber.text,
+                       });
                         Navigator.of(context).pushReplacementNamed('login');
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
