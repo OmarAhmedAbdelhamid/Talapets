@@ -47,7 +47,8 @@ class _TalaPetsState extends State<TalaPets> {
         "signup": (context) => RegisterPage(),
         "login": (context) => LoginPage(showRegisterPage: () {  },),
         "homepage": (context) => Homescreen(),
-        "PetSalesPage": (context) => PetSalesPage(),
+        // "PetSalesPage": (context) => PetSalesPage(),
+        "sellPage": (context) => PetSalesPage(),
       },
       debugShowCheckedModeBanner: false,
     );

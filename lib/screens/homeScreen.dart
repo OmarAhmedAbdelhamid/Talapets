@@ -1,18 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:talapets/screens/categoriesScreen.dart';
+import 'package:talapets/screens/emergencyScreen.dart';
 import 'package:talapets/screens/profile.dart';
-
-void main() {
-  runApp(
-    MaterialApp(
-      home: Container(
-        child: Homescreen(),
-      ),
-    ),
-  );
-}
 
 class Homescreen extends StatefulWidget {
   const Homescreen({Key? key}) : super(key: key);
@@ -47,22 +36,8 @@ class _HomescreenState extends State<Homescreen> {
       ),
       centerTitle: true,
       automaticallyImplyLeading: false,
-      actions: [
-        IconButton(
-            icon: const Icon(Icons.perm_identity_outlined),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  return const ProfileScreen();
-                }),
-              );
-            },
-            color: Color.fromARGB(255, 5, 5, 5))
-      ],
     );
   }
-
 
   Widget bottomNavBar() {
     return BottomNavigationBar(
@@ -74,23 +49,39 @@ class _HomescreenState extends State<Homescreen> {
         setState(() {
           _navIcon = index;
         });
+        if (index == 1) {
+          index = 1;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CategoriesScreen()),
+          );
+        }
+        if (index == 3) {
+          index = 3;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EmergencyScreen()),
+          );
+        }
         if (index == 4) {
           index = 4;
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CategoriesScreen()),
+            MaterialPageRoute(builder: (context) => ProfileScreen()),
           );
         }
       },
       type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home_sharp), label: "home"),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: "explore"),
-        BottomNavigationBarItem(icon: Icon(Icons.add), label: "sell"),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "for you"),
         BottomNavigationBarItem(
-          icon: Icon(Icons.category),
-          label: "categories",
+            icon: Icon(Icons.category), label: "categories"),
+        BottomNavigationBarItem(icon: Icon(Icons.add), label: "sell"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.emergency_outlined), label: "emergency"),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.perm_identity_outlined),
+          label: "profile",
         ),
       ],
     );
@@ -211,6 +202,5 @@ class ProductItem extends StatelessWidget {
         ],
       ),
     );
-
   }
 }

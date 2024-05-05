@@ -1,14 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:talapets/screens/authentication.dart';
+import 'package:talapets/screens/categoriesScreen.dart';
 import 'package:talapets/screens/editProfileScreen.dart';
+import 'package:talapets/screens/emergencyScreen.dart';
 import 'package:talapets/screens/homeScreen.dart';
-import 'package:flutter/src/material/ink_well.dart';
-
-void main() {
-  runApp(const ProfileScreen());
-}
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -19,6 +14,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   double _fontSize = 25;
+  int _navIcon = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -41,30 +37,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               width: 180,
             ),
             centerTitle: true,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (
-                  context,
-                ) {
-                  return const Homescreen();
-                }));
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Color.fromARGB(255, 0, 0, 0),
-              ),
-            ),
           ),
           body: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.white,
-                    backgroundImage: AssetImage('assets/images/profile.png'),
-                  ),
+                CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.white,
+                  backgroundImage: AssetImage('assets/images/profile.png'),
                 ),
                 Text(
                   "Username",
@@ -89,26 +69,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     "6W49+PJC, Al Azaritah WA Ash Shatebi, Bab Sharqi, Alexandria Governorate",
                     20),
                 lineMaker(),
-                InkWell(
-                  child: Container(
-                      child: buildCard(Icons.credit_card, "Delete account", _fontSize)),
-
-                ),
-
-                buildCard(Icons.credit_card, "Delete account", _fontSize),
-
+                buildCard(Icons.credit_card, "**** **** **** *785", _fontSize),
                 lineMaker(),
-
-
                 Padding(
-                  padding: const EdgeInsets.only(top: 70),
+                  padding: const EdgeInsets.only(top: 15),
                   child: Row(children: [
                     Spacer(),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (
-                          context,
-                        ) {
+                            context,
+                            ) {
                           return const EditProfile();
                         }));
                       },
@@ -121,13 +92,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Spacer(),
                     ElevatedButton(
-                      onPressed: () async {
-                        GoogleSignIn googleSignIn = GoogleSignIn();
-                        googleSignIn.disconnect(); // to sign out from google and choose another acc
-                        await FirebaseAuth.instance.signOut(); // sign out
+                      onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (
-                          context,
-                        ) {
+                            context,
+                            ) {
                           return AuthScreen();
                         }));
                       },
@@ -144,25 +112,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
+          bottomNavigationBar: bottomNavBar(),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: const Color(0xff95654E),
+            onPressed: () {},
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+          floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked,
         ),
       ),
     );
   }
 
-/*                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (
-                          context,
-                        ) {
-                          return const EditProfile();
-                        }));
-                      },
-                      child: const Text('Edit Profile',
-                          style: TextStyle(fontSize: 20, fontFamily: 'Caveat')),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xff95654E),
-                          foregroundColor: Colors.white,
-                          fixedSize: Size(170, 60)),
-                    ), */
   Widget lineMaker() {
     return Divider(
       color: const Color(0xff95654E),
@@ -190,6 +152,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget bottomNavBar() {
+    return BottomNavigationBar(
+      selectedItemColor: const Color.fromARGB(255, 175, 130, 96),
+      unselectedItemColor: const Color.fromARGB(255, 50, 44, 43),
+      backgroundColor: const Color(0xffE3B68D),
+      currentIndex: _navIcon,
+      onTap: (index) {
+        setState(() {
+          _navIcon = index;
+        });
+        if (index == 0) {
+          index = 0;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Homescreen()),
+          );
+        }
+        if (index == 1) {
+          index = 1;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CategoriesScreen()),
+          );
+        }
+        if (index == 3) {
+          index = 3;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EmergencyScreen()),
+          );
+        }
+      },
+      type: BottomNavigationBarType.fixed,
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home_sharp), label: "home"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.category), label: "categories"),
+        BottomNavigationBarItem(icon: Icon(Icons.add), label: "sell"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.emergency_outlined), label: "emergency"),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.perm_identity_outlined),
+          label: "profile",
+        ),
+      ],
     );
   }
 }

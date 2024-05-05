@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:talapets/pets/birdsScreen.dart';
 import 'package:talapets/pets/catsScreen.dart';
 import 'package:talapets/pets/dogsScreen.dart';
+import 'package:talapets/screens/emergencyScreen.dart';
 import 'package:talapets/screens/homeScreen.dart';
 import 'package:talapets/models/categoryItem.dart';
 import 'package:talapets/pets/fishScreen.dart';
@@ -9,15 +10,10 @@ import 'package:talapets/pets/othersScreen.dart';
 import 'package:talapets/pets/turtlesScreen.dart';
 import 'package:talapets/screens/profile.dart';
 
-void main() {
-  runApp(const CategoriesScreen());
-}
-
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _CategoriesScreenState createState() => _CategoriesScreenState();
 }
 
@@ -28,28 +24,46 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return BottomNavigationBar(
       selectedItemColor: const Color.fromARGB(255, 175, 130, 96),
       unselectedItemColor: const Color.fromARGB(255, 50, 44, 43),
-      backgroundColor: const Color.fromARGB(255, 228, 197, 158),
+      backgroundColor: const Color(0xffE3B68D),
       currentIndex: _navIcon,
       onTap: (index) {
         setState(() {
           _navIcon = index;
         });
         if (index == 0) {
-          // index = 0;
+          index = 0;
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Homescreen()),
+          );
+        }
+        if (index == 3) {
+          index = 3;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EmergencyScreen()),
+          );
+        }
+        if (index == 4) {
+          index = 4;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfileScreen()),
           );
         }
       },
       type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home_sharp), label: "home"),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: "explore"),
-        BottomNavigationBarItem(icon: Icon(Icons.add), label: "sell"),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "for you"),
         BottomNavigationBarItem(
             icon: Icon(Icons.category), label: "categories"),
+        BottomNavigationBarItem(icon: Icon(Icons.add), label: "sell"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.emergency_outlined), label: "emergency"),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.perm_identity_outlined),
+          label: "profile",
+        ),
       ],
     );
   }
@@ -172,42 +186,38 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return AppBar(
       title: _showSearchBar
           ? TextField(
-              controller: _searchController,
-              decoration: const InputDecoration(
-                hintText: 'Search categories...',
-                border: InputBorder.none,
-                prefixIcon: Icon(Icons.search),
-              ),
-              onChanged: (value) {
-                // Perform search/filtering here
-              },
-            )
+        controller: _searchController,
+        decoration: const InputDecoration(
+          hintText: 'Search categories...',
+          border: InputBorder.none,
+          prefixIcon: Icon(Icons.search),
+        ),
+        onChanged: (value) {
+          // Perform search/filtering here
+        },
+      )
+          : null,
+      leading: !_showSearchBar
+          ? IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: () {
+          setState(() {
+            _showSearchBar = true;
+          });
+        },
+      )
           : null,
       actions: [
-        if (!_showSearchBar)
-          Padding(
-            padding: const EdgeInsets.only(right: 290),
-            child: IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                setState(() {
-                  _showSearchBar = true;
-                });
-              },
-            ),
+        if (_showSearchBar)
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              setState(() {
+                _showSearchBar = false;
+                _searchController.clear();
+              });
+            },
           ),
-        IconButton(
-          icon: const Icon(Icons.perm_identity_outlined),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return const ProfileScreen();
-              }),
-            );
-          },
-          color: Color.fromARGB(255, 5, 5, 5),
-        ),
       ],
       backgroundColor: const Color(0xffE3B68D),
       centerTitle: true,
