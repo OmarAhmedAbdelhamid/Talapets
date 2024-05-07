@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:talapets/pets/birdsScreen.dart';
 import 'package:talapets/pets/catsScreen.dart';
 import 'package:talapets/pets/dogsScreen.dart';
+import 'package:talapets/screens/Sell.dart';
 import 'package:talapets/screens/emergencyScreen.dart';
 import 'package:talapets/screens/homeScreen.dart';
 import 'package:talapets/models/categoryItem.dart';
@@ -18,7 +19,7 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  int _navIcon = 0;
+  int _navIcon = 1;
 
   Widget bottomNavBar() {
     return BottomNavigationBar(
@@ -49,6 +50,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ProfileScreen()),
+          );
+        }
+        if (index == 2) {
+          index = 2;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PetSalesPage()),
           );
         }
       },

@@ -7,6 +7,7 @@ import 'package:talapets/screens/register_page.dart';
 import 'package:talapets/screens/login_page.dart';
 import 'package:talapets/screens/homeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:talapets/screens/Sellitemcart.dart';
 //backend code
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +50,7 @@ class _TalaPetsState extends State<TalaPets> {
         "homepage": (context) => Homescreen(),
         // "PetSalesPage": (context) => PetSalesPage(),
         "sellPage": (context) => PetSalesPage(),
+        "sellItemCart": (context) => SellItemCart(),
       },
       debugShowCheckedModeBanner: false,
     );

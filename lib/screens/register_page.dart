@@ -135,7 +135,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 MyTextField(
                   controller: confPhonenumber,
                   hintText: 'Phone Number',
-                  obsecureText: true,
+                  obsecureText: false,
                   validator: (val){
                     if(val == ""){
                       // return "Can't be empty" ;
@@ -163,7 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                         Navigator.of(context).pushReplacementNamed('login');
                       } on FirebaseAuthException catch (e) {
-                        if (e.code == 'weak-password') {
+                        if (e.code== 'weak-password') {
                           print('The password is weak');
                           AwesomeDialog(
                             context: context,

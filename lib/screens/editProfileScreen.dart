@@ -109,6 +109,7 @@ class _EditProfileState extends State<EditProfile> {
                   icon: Icons.mail_outlined,
                 ),
                 lineMaker(),
+
                 dataEntered(
                     reading: true,
                     controller: textDateOfBirthID,
@@ -156,8 +157,8 @@ class _EditProfileState extends State<EditProfile> {
                 lineMaker(),
                 dataEntered(
                   controller: textAddressID,
-                  hintText: "Address",
-                  icon: Icons.location_on_outlined,
+                  hintText: " Change Password",
+                  icon: Icons.key_off_outlined,
                 ),
                 lineMaker(),
                 dataEntered(

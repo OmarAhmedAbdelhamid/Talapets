@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:talapets/screens/Sell.dart';
 import 'package:talapets/screens/categoriesScreen.dart';
 import 'package:talapets/screens/emergencyScreen.dart';
+import 'package:talapets/screens/productHome.dart';
 import 'package:talapets/screens/profile.dart';
 
 class Homescreen extends StatefulWidget {
@@ -20,9 +22,10 @@ class _HomescreenState extends State<Homescreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff95654E),
         onPressed: () {
-          setState(() {
-            Navigator.of(context).pushReplacementNamed('sellPage');
-          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PetSalesPage()),
+          );
         },
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -74,6 +77,13 @@ class _HomescreenState extends State<Homescreen> {
             MaterialPageRoute(builder: (context) => ProfileScreen()),
           );
         }
+        if (index == 2) {
+          index = 2;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PetSalesPage()),
+          );
+        }
       },
       type: BottomNavigationBarType.fixed,
       items: const [
@@ -107,14 +117,16 @@ class OnlineShoppingApp extends StatelessWidget {
 
 class HomePage extends StatelessWidget {
   final List<Product> products = [
-    Product(name: 'hungry cat', price: 20, image: 'assets/images/cat1.jpg'),
-    Product(name: 'stunt cat', price: 20, image: 'assets/images/cat2.jpg'),
-    Product(name: 'cute dog', price: 30, image: 'assets/images/dog1.jpg'),
-    Product(name: 'drunk dog', price: 40, image: 'assets/images/dog2.jpg'),
-    Product(name: 'funny horse', price: 50, image: 'assets/images/horse1.jpg'),
-    Product(name: 'lazy horse', price: 50, image: 'assets/images/horse2.jpg'),
-    Product(name: 'serious owl', price: 50, image: 'assets/images/owl.jpg'),
-    Product(name: 'idiot goat', price: 50, image: 'assets/images/goat.jpg'),
+    Product(name: ' Hungry cat', price: '20', image: 'assets/images/cat1.jpg'),
+    Product(name: ' Stunt cat', price: '20', image: 'assets/images/cat2.jpg'),
+    Product(name: ' Cute dog', price: '30', image: 'assets/images/dog1.jpg'),
+    Product(name: ' Drunk dog', price: '40', image: 'assets/images/dog2.jpg'),
+    Product(
+        name: ' Funny horse', price: '50', image: 'assets/images/horse1.jpg'),
+    Product(
+        name: ' Lazy horse', price: '50', image: 'assets/images/horse2.jpg'),
+    Product(name: ' Serious owl', price: '50', image: 'assets/images/owl.jpg'),
+    Product(name: ' Idiot goat', price: '50', image: 'assets/images/goat.jpg'),
   ];
 
   @override
@@ -149,7 +161,7 @@ class HomePage extends StatelessWidget {
 
 class Product {
   final String name;
-  final double price;
+  final String price;
   final String image;
 
   Product({required this.name, required this.price, required this.image});
@@ -186,7 +198,7 @@ class ProductItem extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                '\$${product.price.toString()}', // eh dah
+                ' \$${product.price.toString()}', // eh dah
                 style: const TextStyle(
                     fontSize: 16, color: Color.fromARGB(255, 93, 45, 43)),
               ),
@@ -194,7 +206,18 @@ class ProductItem extends StatelessWidget {
           ),
           Center(
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ProductDetails(
+                        product: product,
+                      );
+                    },
+                  ),
+                );
+              },
               child: const Text('View Details',
                   style: TextStyle(fontSize: 18, fontFamily: 'Caveat')),
               style: ElevatedButton.styleFrom(

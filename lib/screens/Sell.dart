@@ -15,7 +15,7 @@ class _PetSalesPageState extends State<PetSalesPage> {
   String _selectedGender = 'Any';
   String _selectedLocation = 'Any';
   String _price = '';
-  int _navIcon = 0;
+  int _navIcon = 2;
 
   // List<String> _genders = ['Any', 'Male', 'Female'];
   // List<String> _locations = ['Any', 'alex', 'cairo', 'giza'];
@@ -25,20 +25,27 @@ class _PetSalesPageState extends State<PetSalesPage> {
 
   Future<void> addUser() {
     // Call the user's CollectionReference to add a new user
+    Navigator.of(context).pushReplacementNamed('sellItemCart');
     return sellpet
         .add({
-      "Price": sellpetController.text,
+      "Price":PriceController.text,
+      "Location": loctionController.text,
+      "Animal Type": AnimalTypeController.text,
+
     })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
   }
 
-  final sellpetController = TextEditingController();
+  final PriceController = TextEditingController();
+  final loctionController = TextEditingController();
+  final AnimalTypeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     List<int> _ages = List.generate(
         61, (index) => index); // Numeric age range 0 to 60 months (5 years)
 
+    var location;
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -84,6 +91,7 @@ class _PetSalesPageState extends State<PetSalesPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    controller: AnimalTypeController,
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
                         fontSize: 28,
@@ -93,7 +101,7 @@ class _PetSalesPageState extends State<PetSalesPage> {
                       filled: true,
                     ),
                     keyboardType:
-                    TextInputType.number, // Allow only numeric input
+                    TextInputType.text, // Allow text only
                     onChanged: (value) {
                       setState(() {
                         _price = value;
@@ -104,6 +112,7 @@ class _PetSalesPageState extends State<PetSalesPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    controller: loctionController,
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
                         fontSize: 28,
@@ -113,7 +122,7 @@ class _PetSalesPageState extends State<PetSalesPage> {
                       filled: true,
                     ),
                     keyboardType:
-                    TextInputType.number, // Allow only numeric input
+                    TextInputType.emailAddress, // Allow only numeric input
                     onChanged: (value) {
                       setState(() {
                         _price = value;
@@ -124,6 +133,7 @@ class _PetSalesPageState extends State<PetSalesPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    controller: PriceController,
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
                         fontSize: 28,
@@ -143,6 +153,7 @@ class _PetSalesPageState extends State<PetSalesPage> {
                 ),
               ],
             ),
+
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -153,6 +164,8 @@ class _PetSalesPageState extends State<PetSalesPage> {
                     // Handle sell button press
                   },
                   //button style
+
+
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(16),
                     backgroundColor: Color(0xff95654E),

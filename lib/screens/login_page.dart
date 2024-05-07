@@ -128,13 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                          try{
                            await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
 
-                           AwesomeDialog(
-                             context: context,
-                             dialogType: DialogType.error,
-                             animType: AnimType.rightSlide,
-                             title: 'Your email is not found',
-                             desc: 'Please insert your correct email',
-                           ).show();
+
                          }catch(e){
 
                          }
@@ -190,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                                   dialogType: DialogType.warning,
                                   animType: AnimType.rightSlide,
                                   title: 'Please verify your email address',
-                                  desc: 'You\'re almost set to start using this app , check your email address and verify',
+                                  desc: 'You\'re almost set to start using this app , check your email address and verify then comeback and log-in ',
                                   btnOkOnPress: () {},
                                 ).show();
                               }

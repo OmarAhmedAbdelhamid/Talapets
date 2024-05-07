@@ -1,10 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:talapets/screens/Sell.dart';
 import 'package:talapets/screens/authentication.dart';
 import 'package:talapets/screens/categoriesScreen.dart';
 import 'package:talapets/screens/editProfileScreen.dart';
 import 'package:talapets/screens/emergencyScreen.dart';
 import 'package:talapets/screens/homeScreen.dart';
+import 'delete_account.dart';
+
+void main() {
+  runApp(const ProfileScreen());
+}
+
+bool _isLoggedIn = false;
+String? Username; // Variable to store the first name retrieved from Firestore
+String? email;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -14,8 +25,42 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+    _fetchUserData();
+  }
+
+  void _checkLoginStatus() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      setState(() {
+        _isLoggedIn = user != null;
+      });
+    });
+  }
+
+  void _fetchUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('userinfo')
+          .doc(user.uid)
+          .get();
+
+      setState(() {
+        Username = snapshot.data()?['Phone'];
+        email = user.email;
+      });
+    } else {
+      setState(() {
+        email = null;
+      });
+    }
+  }
+
   double _fontSize = 25;
-  int _navIcon = 0;
+  int _navIcon = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -30,22 +75,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: const Color(0xffE3B68D),
-            title: Image.asset(
-              "assets/images/logo.png",
-              height: 60,
-              width: 180,
-            ),
-            centerTitle: true,
-          ),
+          appBar: appBar(),
           body: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  backgroundImage: AssetImage('assets/images/profile.png'),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage('assets/images/profile.png'),
+                  ),
                 ),
                 Text(
                   "Username",
@@ -56,60 +96,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 lineMaker(),
-                buildCard(Icons.phone_iphone, "+8181234567", _fontSize),
+                buildCard(Icons.phone_iphone, '$Username', _fontSize),
                 lineMaker(),
                 buildCard(
                     Icons.email_outlined, "username@gmail.com", _fontSize),
-                lineMaker(),
-                buildCard(Icons.cake_outlined, "25/10/2002", _fontSize),
-                lineMaker(),
-                buildCard(Icons.male, "Male", _fontSize),
-                lineMaker(),
-                buildCard(
-                    Icons.location_on_outlined,
-                    "6W49+PJC, Al Azaritah WA Ash Shatebi, Bab Sharqi, Alexandria Governorate",
-                    20),
-                lineMaker(),
-                buildCard(Icons.credit_card, "**** **** **** *785", _fontSize),
+                if (email != null) ...[
+                  SizedBox(height: 15),
+                  Text(
+                    '$email',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
                 lineMaker(),
                 Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Row(children: [
-                    Spacer(),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (
-                            context,
-                            ) {
-                          return const EditProfile();
-                        }));
-                      },
-                      child: const Text('Edit Profile',
-                          style: TextStyle(fontSize: 20, fontFamily: 'Caveat')),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xff95654E),
-                          foregroundColor: Colors.white,
-                          fixedSize: Size(170, 60)),
-                    ),
-                    Spacer(),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (
-                            context,
-                            )
-                        {
-                          return AuthScreen();
-                        }));
-                      },
-                      child: const Text('Log-Out',
-                          style: TextStyle(fontSize: 20, fontFamily: 'Caveat')),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xff95654E),
-                          foregroundColor: Colors.white,
-                          fixedSize: Size(170, 60)),
-                    ),
-                    Spacer(),
-                  ]),
+                  padding: const EdgeInsets.only(top: 40),
+                  child: Container(
+                    padding: EdgeInsets.only(top: 12.0, right: 24.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Spacer(),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (
+                                context,
+                              ) {
+                                return const EditProfile();
+                              }));
+                            },
+                            child: const Text('Edit Profile',
+                                style: TextStyle(
+                                    fontSize: 20, fontFamily: 'Caveat')),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xff632B00),
+                                foregroundColor: Colors.white,
+                                fixedSize: Size(110, 60)),
+                          ),
+                          Spacer(),
+                          ElevatedButton(
+                            onPressed: () async {
+                              await FirebaseAuth.instance.signOut();
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (
+                                context,
+                              ) {
+                                return AuthScreen();
+                              }));
+                            },
+                            child: const Text('Log-Out',
+                                style: TextStyle(
+                                    fontSize: 20, fontFamily: 'Caveat')),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xff632B00),
+                                foregroundColor: Colors.white,
+                                fixedSize: Size(110, 60)),
+                          ),
+                          Spacer(),
+                          DeleteAccountButton()
+                        ]),
+                  ),
                 )
               ],
             ),
@@ -117,14 +163,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           bottomNavigationBar: bottomNavBar(),
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xff95654E),
-            onPressed: () {
-              setState(() {
-                Navigator.of(context).pushReplacementNamed('sellPage');
-              });
-            },
+            onPressed: () {          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PetSalesPage()),
+            );},
             child: const Icon(Icons.add, color: Colors.white),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
         ),
       ),
     );
@@ -132,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget lineMaker() {
     return Divider(
-      color: const Color(0xff95654E),
+      color: Color.fromARGB(255, 140, 84, 58),
       thickness: 3,
       height: 7,
     );
@@ -153,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(
             fontSize: fontSize,
             fontFamily: 'Caveat',
-            color: Color(0xff652B14),
+            color: Color.fromARGB(255, 62, 27, 1),
           ),
         ),
       ),
@@ -170,6 +216,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           _navIcon = index;
         });
+
         if (index == 0) {
           index = 0;
           Navigator.push(
@@ -182,6 +229,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => CategoriesScreen()),
+          );
+        }
+        if (index == 2) {
+          index = 2;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PetSalesPage()),
           );
         }
         if (index == 3) {
@@ -205,6 +259,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           label: "profile",
         ),
       ],
+    );
+  }
+
+  PreferredSizeWidget appBar() {
+    return AppBar(
+      backgroundColor: const Color(0xffE3B68D),
+      title: Image.asset(
+        "assets/images/logo.png",
+        height: 80,
+        width: 180,
+      ),
+      centerTitle: true,
+      automaticallyImplyLeading: false,
     );
   }
 }

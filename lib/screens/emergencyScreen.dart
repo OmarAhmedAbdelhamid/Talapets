@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:talapets/screens/Sell.dart';
 import 'package:talapets/screens/categoriesScreen.dart';
 import 'package:talapets/screens/homeScreen.dart';
 import 'package:talapets/screens/profile.dart';
@@ -11,7 +12,7 @@ class EmergencyScreen extends StatefulWidget {
 }
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
-  int _navIcon = 0;
+  int _navIcon = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +149,13 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         setState(() {
           _navIcon = index;
         });
+        if (index == 2) {
+          index = 2;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PetSalesPage()),
+          );
+        }
         if (index == 1) {
           index = 1;
           Navigator.push(
