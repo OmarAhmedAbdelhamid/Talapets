@@ -25,7 +25,7 @@ class _PetSalesPageState extends State<PetSalesPage> {
 
   Future<void> addUser() {
     // Call the user's CollectionReference to add a new user
-    Navigator.of(context).pushReplacementNamed('sellItemCart');
+    Navigator.of(context).pushReplacementNamed('homepage');
     return sellpet
         .add({
       "Price":PriceController.text,

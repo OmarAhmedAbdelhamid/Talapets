@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:talapets/screens/Sell.dart';
 import 'package:talapets/screens/authentication.dart';
 import 'package:talapets/screens/categoriesScreen.dart';
@@ -16,6 +17,7 @@ void main() {
 bool _isLoggedIn = false;
 String? Username; // Variable to store the first name retrieved from Firestore
 String? email;
+String? Phone;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -31,6 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _fetchUserData();
   }
 
+//hceck if e=he loogged in
   void _checkLoginStatus() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       setState(() {
@@ -39,6 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  ///Take info for firestore
   void _fetchUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -49,12 +53,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .get();
 
       setState(() {
-        Username = snapshot.data()?['Phone'];
+        Username = snapshot.data()?['Name'];
+        Phone = snapshot.data()?['Phone'];
         email = user.email;
       });
     } else {
       setState(() {
         email = null;
+      });
+    }
+  }
+  Future<void> fetchUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      CollectionReference users =
+      FirebaseFirestore.instance.collection('userinfo');
+
+      DocumentSnapshot userinfo = await users.doc(user.uid).get();
+      setState(() {
+        Username = userinfo['Name'];
       });
     }
   }
@@ -88,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 Text(
-                  "Username",
+                  '$Username',
                   style: TextStyle(
                     color: const Color(0xff652B14),
                     fontSize: 40,
@@ -98,16 +115,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 lineMaker(),
                 buildCard(Icons.phone_iphone, '$Username', _fontSize),
                 lineMaker(),
-                buildCard(
-                    Icons.email_outlined, "username@gmail.com", _fontSize),
-                if (email != null) ...[
-                  SizedBox(height: 15),
-                  Text(
-                    '$email',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ],
+                buildCard(Icons.email_outlined, "$email", _fontSize),
                 lineMaker(),
+
                 Padding(
                   padding: const EdgeInsets.only(top: 40),
                   child: Container(
@@ -136,6 +146,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Spacer(),
                           ElevatedButton(
                             onPressed: () async {
+                              // to sign out and when u come back and sign in with google give u options to do
+                              GoogleSignIn googleSignIn = GoogleSignIn();
+                              googleSignIn.disconnect();
                               await FirebaseAuth.instance.signOut();
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (
@@ -163,10 +176,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           bottomNavigationBar: bottomNavBar(),
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xff95654E),
-            onPressed: () {          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PetSalesPage()),
-            );},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PetSalesPage()),
+              );
+            },
             child: const Icon(Icons.add, color: Colors.white),
           ),
           floatingActionButtonLocation:

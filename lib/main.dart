@@ -50,7 +50,7 @@ class _TalaPetsState extends State<TalaPets> {
         "homepage": (context) => Homescreen(),
         // "PetSalesPage": (context) => PetSalesPage(),
         "sellPage": (context) => PetSalesPage(),
-        "sellItemCart": (context) => SellItemCart(),
+        // "sellItemCart": (context) => SellItemCart(),
       },
       debugShowCheckedModeBanner: false,
     );

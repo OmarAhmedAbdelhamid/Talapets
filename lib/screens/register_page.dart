@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:talapets/buttons/my_textField.dart';
 import 'package:talapets/buttons/sign_in_button.dart';
 import '../buttons/Buttonsssss.dart';
-import 'login_page.dart';
+
 
 // ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
@@ -31,24 +31,29 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> addUser() {
     // Call the user's CollectionReference to add a new user
+    Navigator.of(context).pushReplacementNamed('login');
+
     return userinfo
         .add({
-      "Username": usernamecontroller.text,
-      "Email": emailcontroller.text,
-      "Phone": confPhonenumber.text,
+      "Phone":confPhonenumber.text,
+      "Name":usernamecontroller.text,
+
+
     })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
   }
 
+
+
   /////end of firestore info
-  final usernamecontroller = TextEditingController();
+  var usernamecontroller = TextEditingController();
 
-  final emailcontroller = TextEditingController();
+  var emailcontroller = TextEditingController();
 
-  final passwordcontroller = TextEditingController();
+  var passwordcontroller = TextEditingController();
 
-  final confPhonenumber = TextEditingController();
+  var confPhonenumber = TextEditingController();
 
   GlobalKey<FormState> formState = GlobalKey<FormState>();
 
@@ -163,7 +168,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                         Navigator.of(context).pushReplacementNamed('login');
                       } on FirebaseAuthException catch (e) {
-                        if (e.code== 'weak-password') {
+                        if (e.code == 'weak-password') {
                           print('The password is weak');
                           AwesomeDialog(
                             context: context,
